@@ -1,0 +1,10 @@
+*~
+*.class
+template.java
+*.o
+*.exe
+in.txt
+out.txt
+comp.log
+err.log
+sol.exe
