@@ -4,28 +4,29 @@
 using namespace std;
 
 const int MN = 1e5+5, MT = 127;
-int N, K, arr[MN];
+int N, K, pxa[MN];
 
 int main(){
 	cin >> N >> K;
 	for(int i = 1; i <= N; i++){
-		cin >> arr[i];
-		arr[i] ^= arr[i - 1];
+		cin >> pxa[i];
+		pxa[i] ^= pxa[i - 1];
 	}
 
 	map<int, int> freq;
-	vector<int> diff;
+	vector<int> M;
 
 	for(long long i = K; i <= MT; i *= K)
-		diff.push_back(i);
+		M.push_back(i);
 
 	long long ans = 0;
-	for(int i = 0; i <= N; i++){
-		for(int n : diff){
-			if(freq.count(n ^ arr[i]))
-				ans += freq[n ^ arr[i]];
+	freq[0] = 1;
+	for(int R = 1; R <= N; R++){
+		for(int m : M){
+			if(freq.count(m ^ pxa[R]))
+				ans += freq[m ^ pxa[R]];
 		}
-		++freq[arr[i]];
+		freq[pxa[R]] += 1;
 	}
 
 	cout << ans << '\n';
