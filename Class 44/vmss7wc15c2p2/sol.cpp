@@ -1,31 +1,39 @@
-// THIS IS INCOMPLETE
-
 #include <iostream>
 using namespace std;
 
+typedef long long int lli;
+const int MN = 5e4+5, BASE = 12345, MOD = 1e9+7;
+int N;
+string temp, str = "#";
+lli fhash[MN], rhash[MN], power[MN];
+
 bool ispalin(int left, int right){
-	int forward = fhash[right] - fhash[left - 1] * pow[right - left + 1];
-	int backward = rhash[left] - rhash[right + 1] * pow[right - left + 1];
+	if(left < 0 || right >= N) return false;
+
+	lli forward, backward;
+	if(left == 0) forward = fhash[right];
+	else forward = (fhash[right] + MOD - fhash[left - 1] * power[right - left + 1] % MOD) % MOD;
+
+	if(right == N - 1) backward = rhash[left];
+	else backward = (rhash[left] + MOD - rhash[right + 1] * power[right - left + 1] % MOD) % MOD;
+
 	return forward == backward;
 }
 
 int main(){
-	int N;
-	string temp, str = "#";
-	
 	cin >> N >> temp;
 
 	for(int i = 0; i < N; i++)
 		str += string{""} + temp[i] + "#";
 
-	cerr << str;
+	N = N * 2 + 1;
 
 	fhash[0] = str[0];
-	pow[0] = 1;
+	power[0] = 1;
 
 	for(int i = 1; i < N; i++){
 		fhash[i] = (fhash[i - 1] * BASE + str[i]) % MOD;
-		pow[i] = pow[i - 1] * BASE % MOD;
+		power[i] = power[i - 1] * BASE % MOD;
 	}
 
 	rhash[N - 1] = str[N - 1];
@@ -35,7 +43,7 @@ int main(){
 
 	int best = 0, bestIdx = 0;
 
-	for(int i = 0; i < 2 * N + 1; i++){
+	for(int i = 0; i < N; i++){
 		int left = 0, right = N, mid;
 		while(left < right){
 			mid = (left + right + 1) / 2;
@@ -52,9 +60,9 @@ int main(){
 		}
 	}
 
-	cout << best << '\n';
 	for(int i = bestIdx - best; i <= bestIdx + best; i++){
 		if(str[i] != '#')
 			cout << str[i];
 	}
+	cout << '\n' << best << '\n';
 }
